@@ -1,20 +1,16 @@
-import React, {Component, Fragment} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import Mobile from './components/Mobile';
 import Desktop from './components/Desktop';
-
-//stado que lea el with de la pantalla
-//hacer dos componentes una movil y una desktop
-//dependiendo del estado renderiza una u ota
-//subirlo a github
+import Home from './components/Home';
 
 class App extends Component {
     state = { 
             width: window.innerWidth ,
             userboundary: 500
         }
-    componentWillMount() {
+
+    componentDidMount() {
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
     
@@ -41,19 +37,22 @@ class App extends Component {
     render() { 
         const { width,userboundary } = this.state;
         const isMobile = width <= userboundary;
-        let component;
-        isMobile ? component = <Mobile /> : component= <Desktop />
-        return (
-            <Fragment >
-                {width }
-                {component}
-                <input type = "number" onChange={this.handleChangeWidth} value= {userboundary}/>
-            </Fragment>
+        let componente;
+        isMobile ? componente = <Mobile /> : componente= <Desktop />
+        return (     
+            <Switch>
+                <Route exact path = "/" 
+                    render = { routerProps => (
+                        <Home 
+                            component = {componente} 
+                            width={width} 
+                            userboundary={userboundary} 
+                            handleChangeWidth={this.handleChangeWidth} 
+                        />
+                    )}
+                />          
+            </Switch>        
         )
-        // if (isMobile)
-        //     return <Mobile />
-        // else 
-        //     return <Desktop />
     }
 }
  
